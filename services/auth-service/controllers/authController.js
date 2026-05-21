@@ -24,6 +24,17 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'Please provide all required fields' });
     }
 
+    if (username.length < 8) {
+      return res.status(400).json({ message: 'Username must be at least 8 characters' });
+    }
+    if (username.includes(' ')) {
+      return res.status(400).json({ message: 'Username cannot contain spaces' });
+    }
+    const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+    if (!alphanumericRegex.test(username)) {
+      return res.status(400).json({ message: 'Username must contain only alphanumeric characters' });
+    }
+
     // Check if user already exists
     const userExists = await User.findOne({ $or: [{ email }, { username }] });
     if (userExists) {

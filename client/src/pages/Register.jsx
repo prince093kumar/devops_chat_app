@@ -24,6 +24,16 @@ const Register = () => {
     if (password.length < 6) {
       return setError('Password must be at least 6 characters');
     }
+    if (username.length < 8) {
+      return setError('Username must be at least 8 characters');
+    }
+    if (username.includes(' ')) {
+      return setError('Username cannot contain spaces');
+    }
+    const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+    if (!alphanumericRegex.test(username)) {
+      return setError('Username must contain only alphanumeric characters');
+    }
 
     setIsLoading(true);
     try {
@@ -83,7 +93,7 @@ const Register = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="john_doe"
+                placeholder="johndoe123"
                 className="w-full pl-11 pr-4 py-3.5 bg-slate-950/65 border border-slate-800/80 hover:border-slate-700/80 focus:border-indigo-500/80 rounded-2xl text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all duration-300 font-medium text-sm"
                 required
               />
