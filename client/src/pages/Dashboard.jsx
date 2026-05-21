@@ -48,6 +48,7 @@ const Dashboard = () => {
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
   const [showCreateRoomModal, setShowCreateRoomModal] = useState(false);
+  const [visibleUsernameMsgId, setVisibleUsernameMsgId] = useState(null);
   
   const [newRoomName, setNewRoomName] = useState('');
   const [newRoomDesc, setNewRoomDesc] = useState('');
@@ -331,13 +332,22 @@ const Dashboard = () => {
         <div className="flex-1 overflow-y-auto px-4 py-6 md:px-8 space-y-6 scrollbar-thin">
           {filteredMessages.map((msg, index) => {
             const isSelf = msg.senderId === (user?.id || user?._id);
+            const msgKey = msg._id || index;
             return (
-              <div key={msg._id || index} className={`flex gap-3 max-w-[90%] lg:max-w-[75%] group ${isSelf ? 'ml-auto flex-row-reverse' : 'mr-auto'}`}>
-                <div className={`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center text-white font-bold text-xs ${getAvatarGradient(msg.senderUsername)}`}>
+              <div key={msgKey} className={`flex gap-3 max-w-[90%] lg:max-w-[75%] group ${isSelf ? 'ml-auto flex-row-reverse' : 'mr-auto'}`}>
+                <div 
+                  onClick={() => setVisibleUsernameMsgId(visibleUsernameMsgId === msgKey ? null : msgKey)}
+                  className={`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center text-white font-bold text-xs cursor-pointer hover:opacity-80 transition-opacity ${getAvatarGradient(msg.senderUsername)}`}
+                  title="Click to show username"
+                >
                   {msg.senderUsername ? msg.senderUsername.substring(0, 2).toUpperCase() : '??'}
                 </div>
                 <div className={`flex flex-col ${isSelf ? 'items-end' : 'items-start'}`}>
-                  {!isSelf && <span className="text-[11px] text-slate-400 font-medium mb-1 ml-1">{msg.senderUsername}</span>}
+                  {!isSelf && visibleUsernameMsgId === msgKey && (
+                    <span className="text-[11px] text-slate-400 font-medium mb-1 ml-1 animate-in fade-in slide-in-from-bottom-1 duration-200">
+                      {msg.senderUsername}
+                    </span>
+                  )}
                   
                   <div className={`px-4 py-2.5 rounded-2xl text-[14px] leading-relaxed transition-all relative group-hover:shadow-md ${
                     isSelf 

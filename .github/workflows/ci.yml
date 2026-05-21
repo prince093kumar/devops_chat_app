@@ -8,7 +8,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  # Replace with actual github username if running, default to github.repository_owner
   OWNER: ${{ github.repository_owner }}
 
 jobs:
@@ -39,7 +38,7 @@ jobs:
           npm ci
           # We can run mock tests (using our written jest suite)
           # Set NODE_ENV to test to skip DB connection in index.js and use mock/test DB
-          MONGO_URI_TEST=mongodb://localhost:27017/test_db npm run test || true
+          MONGO_URI_TEST=mongodb://localhost:27017/test_db npm run test
 
       # Install & Test Chat Service
       - name: 💬 Install & Validate Chat Service
