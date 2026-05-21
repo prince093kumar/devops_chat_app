@@ -1,19 +1,25 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
 const app = require('../index');
 const User = require('../models/User');
 
-const TEST_MONGO_URI = process.env.MONGO_URI_TEST || 'mongodb://127.0.0.1:27017/auth_db_test';
+let mongoServer;
 
 beforeAll(async () => {
   // Disconnect from standard database to avoid collision
   await mongoose.disconnect();
-  await mongoose.connect(TEST_MONGO_URI);
+  mongoServer = await MongoMemoryServer.create();
+  const mongoUri = mongoServer.getUri();
+  await mongoose.connect(mongoUri);
 });
 
 afterAll(async () => {
   await User.deleteMany({});
-  await mongoose.connection.close();
+  await mongoose.disconnect();
+  if (mongoServer) {
+    await mongoServer.stop();
+  }
 });
 
 beforeEach(async () => {

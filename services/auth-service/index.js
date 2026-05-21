@@ -7,8 +7,10 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Connect to Database
-connectDB();
+// Connect to Database (skip if running in Jest tests)
+if (process.env.NODE_ENV !== 'test' && !process.env.JEST_WORKER_ID) {
+  connectDB();
+}
 
 // Middlewares
 app.use(helmet());
