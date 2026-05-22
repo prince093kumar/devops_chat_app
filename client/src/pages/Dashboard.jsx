@@ -9,11 +9,12 @@ import {
   Smile, Paperclip, Activity, Image, Menu, Info,
   X, Shield, Clock, ChevronRight, Globe
 } from 'lucide-react';
+import EmojiPicker from 'emoji-picker-react';
 
 const getAvatarGradient = (username) => {
-  if (!username) return 'bg-violet-600';
+  if (!username) return 'bg-teal-600';
   const colors = [
-    'bg-violet-600', 'bg-emerald-600', 'bg-blue-600', 
+    'bg-teal-600', 'bg-emerald-600', 'bg-blue-600', 
     'bg-rose-600', 'bg-amber-600', 'bg-cyan-600', 'bg-pink-600'
   ];
   let hash = 0;
@@ -49,6 +50,7 @@ const Dashboard = () => {
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
   const [showCreateRoomModal, setShowCreateRoomModal] = useState(false);
   const [visibleUsernameMsgId, setVisibleUsernameMsgId] = useState(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   
   const [newRoomName, setNewRoomName] = useState('');
   const [newRoomDesc, setNewRoomDesc] = useState('');
@@ -208,20 +210,18 @@ const Dashboard = () => {
   }, [messages, selectedLanguage]);
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-200 font-sans overflow-hidden">
+    <div className="flex h-screen bg-transparent text-slate-200 font-sans overflow-hidden">
       
       {/* 1. LEFT SIDEBAR (Rooms & Navigation) */}
       {isLeftSidebarOpen && (
         <div className="lg:hidden fixed inset-0 bg-slate-950/80 z-30 backdrop-blur-sm" onClick={() => setIsLeftSidebarOpen(false)} />
       )}
-      <div className={`w-72 lg:w-72 h-full bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 z-40 fixed lg:relative transition-transform duration-300 ${isLeftSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+      <div className={`w-72 lg:w-72 h-full bg-slate-900/20 backdrop-blur-sm border-r border-slate-800/50 flex flex-col shrink-0 z-40 fixed lg:relative transition-transform duration-300 ${isLeftSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         
         {/* Brand */}
-        <div className="h-16 flex items-center px-5 border-b border-slate-800 shrink-0">
-          <div className="flex items-center gap-2.5 text-violet-400">
-            <MessageSquare className="w-6 h-6" />
-            <span className="font-bold text-lg text-slate-100 tracking-tight">ChatPulse</span>
-          </div>
+        <div className="h-16 flex items-center px-5 border-b border-slate-800/50 shrink-0">
+          <MessageSquare className="w-6 h-6 text-teal-500 mr-2" />
+          <h1 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-200 tracking-tight">ChatPulse</h1>
         </div>
 
         {/* Search */}
@@ -233,7 +233,7 @@ const Dashboard = () => {
               placeholder="Search..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-950/50 border border-slate-800 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-violet-500/50 transition-colors"
+              className="w-full bg-slate-950/50 border border-slate-800 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-teal-500/50 transition-colors"
             />
           </div>
         </div>
@@ -243,7 +243,7 @@ const Dashboard = () => {
           <div>
             <div className="flex items-center justify-between px-3 mb-2">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Channels</span>
-              <button onClick={() => setShowCreateRoomModal(true)} className="text-slate-400 hover:text-violet-400 transition-colors p-1 rounded hover:bg-slate-800">
+              <button onClick={() => setShowCreateRoomModal(true)} className="text-slate-400 hover:text-teal-400 transition-colors p-1 rounded hover:bg-slate-800">
                 <Plus className="w-4 h-4" />
               </button>
             </div>
@@ -254,13 +254,13 @@ const Dashboard = () => {
                   <button
                     key={room._id}
                     onClick={() => { setActiveRoom(room); setIsLeftSidebarOpen(false); }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                      isActive ? 'bg-violet-500/10 text-violet-300' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
+                      isActive ? 'bg-gradient-to-r from-teal-500/20 to-transparent border-l-2 border-teal-400 text-teal-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] font-bold' : 'text-slate-200 font-semibold hover:bg-slate-800/50 hover:text-white'
                     }`}
                   >
                     {room.adminId ? <Shield className="w-4 h-4 shrink-0 opacity-70" /> : <Hash className="w-4 h-4 shrink-0 opacity-70" />}
                     <span className="truncate flex-1 text-left">{room.name}</span>
-                    {isActive && <div className="w-1.5 h-1.5 rounded-full bg-violet-500 shrink-0" />}
+                    {isActive && <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0" />}
                   </button>
                 );
               })}
@@ -269,7 +269,7 @@ const Dashboard = () => {
         </div>
 
         {/* User Profile */}
-        <div className="p-4 border-t border-slate-800 bg-slate-900/50 shrink-0 flex items-center justify-between">
+        <div className="p-4 border-t border-slate-800/50 bg-slate-900/20 shrink-0 flex items-center justify-between">
           <div className="flex items-center gap-3 overflow-hidden">
             <div className={`w-9 h-9 rounded-lg ${getAvatarGradient(user?.username)} flex items-center justify-center text-white font-bold text-sm shrink-0`}>
               {user?.username?.substring(0, 2).toUpperCase()}
@@ -286,7 +286,7 @@ const Dashboard = () => {
       </div>
 
       {/* 2. MAIN CHAT AREA */}
-      <div className="flex-1 flex flex-col min-w-0 bg-slate-950 relative z-10">
+      <div className="flex-1 flex flex-col min-w-0 bg-slate-950/30 relative z-10">
         
         {/* Header */}
         <div className="h-16 border-b border-slate-800 flex items-center justify-between px-4 lg:px-6 bg-slate-950/80 backdrop-blur-md shrink-0">
@@ -297,7 +297,7 @@ const Dashboard = () => {
             {activeRoom && (
               <div className="truncate">
                 <h1 className="font-semibold text-slate-100 flex items-center gap-2 truncate text-sm md:text-base">
-                  {activeRoom.adminId ? <Shield className="w-4 h-4 text-violet-400" /> : <Hash className="w-4 h-4 text-slate-400" />}
+                  {activeRoom.adminId ? <Shield className="w-4 h-4 text-teal-400" /> : <Hash className="w-4 h-4 text-slate-400" />}
                   {activeRoom.name}
                 </h1>
               </div>
@@ -320,7 +320,7 @@ const Dashboard = () => {
             {/* Right Sidebar Toggle (Room Info) */}
             <button 
               onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
-              className={`p-1.5 md:p-2 rounded-lg transition-colors border ${isRightSidebarOpen ? 'bg-violet-500/10 border-violet-500/20 text-violet-400' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
+              className={`p-1.5 md:p-2 rounded-lg transition-colors border ${isRightSidebarOpen ? 'bg-teal-500/10 border-teal-500/20 text-teal-400' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
               title="Room Info"
             >
               <Info className="w-4 h-4 md:w-5 md:h-5" />
@@ -351,7 +351,7 @@ const Dashboard = () => {
                   
                   <div className={`px-4 py-2.5 rounded-2xl text-[14px] leading-relaxed transition-all relative group-hover:shadow-md ${
                     isSelf 
-                      ? 'bg-violet-600 text-white rounded-tr-sm' 
+                      ? 'bg-gradient-to-br from-teal-500 to-emerald-600 shadow-md shadow-teal-500/20 text-white rounded-tr-sm' 
                       : 'bg-slate-800 border border-slate-700/50 text-slate-200 rounded-tl-sm'
                   }`}>
                     <p className="whitespace-pre-wrap font-medium">
@@ -361,7 +361,7 @@ const Dashboard = () => {
                       }
                     </p>
                     {selectedLanguage !== 'original' && translatedMessages[`${msg._id || msg.timestamp}_${selectedLanguage}`] && (
-                      <div className="text-[9px] text-violet-300 font-bold mt-1 opacity-80 flex items-center gap-1">
+                      <div className="text-[9px] text-teal-300 font-bold mt-1 opacity-80 flex items-center gap-1">
                         <Globe className="w-3 h-3" /> Translated
                       </div>
                     )}
@@ -386,27 +386,34 @@ const Dashboard = () => {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 md:p-6 bg-slate-950 shrink-0">
+        <div className="p-4 md:p-6 bg-slate-950/60 backdrop-blur-md border-t border-slate-800/50 shrink-0">
           <div className="max-w-5xl mx-auto">
             {/* Typing Indicator */}
             <div className="h-5 flex items-center pl-2 mb-1.5">
               {Object.keys(typingUsers).length > 0 && (
                 <span className="text-[11px] text-slate-500 flex items-center gap-1.5">
-                  <span className="font-semibold text-violet-400">{Object.keys(typingUsers).join(', ')}</span> is typing
+                  <span className="font-semibold text-teal-400">{Object.keys(typingUsers).join(', ')}</span> is typing
                   <span className="flex gap-0.5 ml-1">
-                    <span className="w-1 h-1 bg-violet-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1 h-1 bg-violet-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1 h-1 bg-violet-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-1 h-1 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1 h-1 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1 h-1 bg-teal-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </span>
                 </span>
               )}
             </div>
             
-            <form onSubmit={handleSendMessage} className="bg-slate-900 border border-slate-800 focus-within:border-violet-500/50 rounded-xl transition-colors shadow-sm flex items-center gap-2 p-1.5 md:p-2">
-              <div className="hidden sm:flex items-center gap-1 pl-1">
-                <button type="button" className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"><Paperclip className="w-4 h-4" /></button>
-                <button type="button" className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"><Image className="w-4 h-4" /></button>
-              </div>
+            <div className="relative">
+              {showEmojiPicker && (
+                <div className="absolute bottom-full right-12 mb-4 z-50 shadow-2xl">
+                  <EmojiPicker 
+                    onEmojiClick={(emojiData) => setInputText(prev => prev + emojiData.emoji)} 
+                    theme="dark" 
+                    searchDisabled={true}
+                    skinTonesDisabled={true}
+                  />
+                </div>
+              )}
+              <form onSubmit={handleSendMessage} className="bg-slate-900/80 backdrop-blur-md border border-slate-700/50 focus-within:border-teal-400 focus-within:shadow-[0_0_15px_rgba(20,184,166,0.15)] rounded-2xl transition-all flex items-center gap-2 p-1.5 md:p-2">
               <input
                 type="text"
                 value={inputText}
@@ -416,16 +423,17 @@ const Dashboard = () => {
                 className="flex-1 bg-transparent border-none text-slate-200 placeholder-slate-500 focus:outline-none text-sm px-2 py-2"
               />
               <div className="flex items-center gap-1 shrink-0">
-                <button type="button" className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors hidden sm:block"><Smile className="w-4 h-4" /></button>
+                <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="p-2 text-slate-400 hover:text-teal-400 hover:bg-slate-800 rounded-lg transition-colors hidden sm:block"><Smile className="w-5 h-5" /></button>
                 <button
                   type="submit"
                   disabled={!inputText.trim() || !activeRoom}
-                  className="p-2.5 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:hover:bg-violet-600 text-white rounded-lg transition-colors flex items-center justify-center"
+                  className="p-2.5 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:hover:bg-teal-600 text-white rounded-lg hover:-translate-y-0.5 shadow-[0_0_15px_rgba(20,184,166,0.3)] hover:shadow-[0_0_20px_rgba(20,184,166,0.5)] transition-all flex items-center justify-center"
                 >
                   <Send className="w-4 h-4 ml-0.5" />
                 </button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       </div>
@@ -434,7 +442,7 @@ const Dashboard = () => {
       {isRightSidebarOpen && (
         <div className="lg:hidden fixed inset-0 bg-slate-950/80 z-30 backdrop-blur-sm" onClick={() => setIsRightSidebarOpen(false)} />
       )}
-      <div className={`w-80 h-full bg-slate-900 border-l border-slate-800 flex flex-col shrink-0 z-40 fixed right-0 lg:relative transition-transform duration-300 ${isRightSidebarOpen ? 'translate-x-0' : 'translate-x-full'} ${!isRightSidebarOpen ? 'lg:hidden' : 'lg:flex'}`}>
+      <div className={`w-80 h-full bg-slate-900/20 backdrop-blur-sm border-l border-slate-800/50 flex flex-col shrink-0 z-40 fixed right-0 lg:relative transition-transform duration-300 ${isRightSidebarOpen ? 'translate-x-0' : 'translate-x-full'} ${!isRightSidebarOpen ? 'lg:hidden' : 'lg:flex'}`}>
         
         {/* Header */}
         <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800 shrink-0">
@@ -450,7 +458,7 @@ const Dashboard = () => {
             {/* Room Overview */}
             <div className="text-center space-y-3">
               <div className="w-16 h-16 mx-auto bg-slate-800 rounded-2xl border border-slate-700 flex items-center justify-center">
-                {activeRoom.adminId ? <Shield className="w-8 h-8 text-violet-400" /> : <Hash className="w-8 h-8 text-slate-400" />}
+                {activeRoom.adminId ? <Shield className="w-8 h-8 text-teal-400" /> : <Hash className="w-8 h-8 text-slate-400" />}
               </div>
               <div>
                 <h2 className="font-bold text-slate-100 text-lg">{activeRoom.name}</h2>
@@ -473,10 +481,10 @@ const Dashboard = () => {
                         value={inviteUsername}
                         onChange={(e) => setInviteUsername(e.target.value)}
                         placeholder="Username"
-                        className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-violet-500"
+                        className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-teal-500"
                         required
                       />
-                      <button type="submit" className="bg-violet-600 hover:bg-violet-700 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors">
+                      <button type="submit" className="bg-teal-600 hover:bg-teal-500 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors">
                         Add
                       </button>
                     </div>
@@ -503,7 +511,7 @@ const Dashboard = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-slate-200 truncate">{roomMembers.admin.username}</p>
-                      <p className="text-[10px] text-violet-400 font-semibold">Admin</p>
+                      <p className="text-[10px] text-teal-400 font-semibold">Admin</p>
                     </div>
                   </div>
                 )}
@@ -539,7 +547,7 @@ const Dashboard = () => {
                   type="text"
                   value={newRoomName}
                   onChange={(e) => setNewRoomName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-200 text-sm focus:outline-none focus:border-violet-500"
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-200 text-sm focus:outline-none focus:border-teal-500"
                   required
                 />
               </div>
@@ -549,7 +557,7 @@ const Dashboard = () => {
                   type="text"
                   value={newRoomDesc}
                   onChange={(e) => setNewRoomDesc(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-200 text-sm focus:outline-none focus:border-violet-500"
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-slate-200 text-sm focus:outline-none focus:border-teal-500"
                 />
               </div>
               <div className="flex items-center gap-2 pt-1">
@@ -558,13 +566,13 @@ const Dashboard = () => {
                   id="privateCheck"
                   checked={newRoomIsPrivate}
                   onChange={(e) => setNewRoomIsPrivate(e.target.checked)}
-                  className="w-4 h-4 rounded text-violet-500 bg-slate-950 border-slate-700 focus:ring-violet-500"
+                  className="w-4 h-4 rounded text-teal-500 bg-slate-950 border-slate-700 focus:ring-teal-500"
                 />
                 <label htmlFor="privateCheck" className="text-sm text-slate-300 cursor-pointer">Private Group Channel 🔒</label>
               </div>
               <div className="flex justify-end gap-3 pt-4 border-t border-slate-800 mt-2">
                 <button type="button" onClick={() => setShowCreateRoomModal(false)} className="px-4 py-2 text-sm text-slate-400 hover:text-slate-200 font-medium">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium transition-colors">Create</button>
+                <button type="submit" className="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-sm font-medium transition-colors">Create</button>
               </div>
             </form>
           </div>

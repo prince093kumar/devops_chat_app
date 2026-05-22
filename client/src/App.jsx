@@ -13,8 +13,8 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400 gap-4">
-        <span className="block w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></span>
+      <div className="min-h-screen bg-transparent flex flex-col items-center justify-center text-slate-400 gap-4">
+        <span className="block w-10 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></span>
         <p className="text-sm font-semibold tracking-wider animate-pulse">Initializing Chat Workspace...</p>
       </div>
     );
