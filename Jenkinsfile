@@ -57,7 +57,7 @@ pipeline {
                     while (retries > 0 && !healthy) {
                         try {
                             // Check if gateway returns healthy response (e.g. 500/404 or active)
-                            sh 'curl -f http://localhost:5000/ || exit 1'
+                            sh 'curl -s http://localhost:5000/ > /dev/null || exit 1'
                             echo '✅ Central Gateway is online.'
                             healthy = true
                         } catch (Exception e) {
