@@ -32,7 +32,7 @@ jobs:
             client/package-lock.json
 
       # Install & Test Auth Service (using MongoDB Memory Server or mock env)
-      - name: 🔒 Install & Test Auth Service
+      - name:  Install & Test Auth Service
         run: |
           cd services/auth-service
           npm ci
@@ -41,19 +41,19 @@ jobs:
           MONGO_URI_TEST=mongodb://localhost:27017/test_db npm run test
 
       # Install & Test Chat Service
-      - name: 💬 Install & Validate Chat Service
+      - name:  Install & Validate Chat Service
         run: |
           cd services/chat-service
           npm ci
 
       # Install & Test Notification Service
-      - name: 🔔 Install & Validate Notification Service
+      - name:  Install & Validate Notification Service
         run: |
           cd services/notification-service
           npm ci
 
       # Install & Test Client
-      - name: 🎨 Install & Build Client
+      - name:  Install & Build Client
         run: |
           cd client
           npm ci
@@ -61,7 +61,7 @@ jobs:
 
   # Job 2: Build & Push Docker Images Concurrently via Matrix Strategy
   build-and-push:
-    name: 🐳 Build & Publish Docker Images
+    name:  Build & Publish Docker Images
     needs: test
     runs-on: ubuntu-latest
     permissions:
@@ -87,13 +87,13 @@ jobs:
             image: micro-chat-client
 
     steps:
-      - name: ⬇️ Checkout Repository
+      - name:  Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 🛠️ Set up Docker Buildx
+      - name:  Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: 🔑 Log in to GitHub Container Registry
+      - name:  Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
@@ -101,7 +101,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Build and push with cache to make builds extremely fast
-      - name: 📦 Build and Push Matrix Images
+      - name:  Build and Push Matrix Images
         uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.service.path }}

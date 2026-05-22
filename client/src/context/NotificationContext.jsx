@@ -58,9 +58,13 @@ export const NotificationProvider = ({ children }) => {
   };
 
   const clearAllNotifications = async () => {
-    // Helper to mark all as read locally for convenience
-    for (const n of notifications.filter(x => !x.read)) {
-      await markAsRead(n._id);
+    if (!user) return;
+    try {
+      await api.delete(`/api/notifications/all/${user.id || user._id}`);
+      setNotifications([]);
+      setUnreadCount(0);
+    } catch (err) {
+      console.error('Error clearing all notifications:', err);
     }
   };
 

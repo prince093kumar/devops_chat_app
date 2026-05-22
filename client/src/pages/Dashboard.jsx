@@ -216,7 +216,7 @@ const Dashboard = () => {
       {isLeftSidebarOpen && (
         <div className="lg:hidden fixed inset-0 bg-slate-950/80 z-30 backdrop-blur-sm" onClick={() => setIsLeftSidebarOpen(false)} />
       )}
-      <div className={`w-72 lg:w-72 h-full bg-slate-900/20 backdrop-blur-sm border-r border-slate-800/50 flex flex-col shrink-0 z-40 fixed lg:relative transition-transform duration-300 ${isLeftSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+      <div className={`w-72 lg:w-72 h-full bg-slate-950 border-r border-slate-800/50 flex flex-col shrink-0 z-40 fixed lg:relative transition-transform duration-300 ${isLeftSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         
         {/* Brand */}
         <div className="h-16 flex items-center px-5 border-b border-slate-800/50 shrink-0">
@@ -289,7 +289,7 @@ const Dashboard = () => {
       <div className="flex-1 flex flex-col min-w-0 bg-slate-950/30 relative z-10">
         
         {/* Header */}
-        <div className="h-16 border-b border-slate-800 flex items-center justify-between px-4 lg:px-6 bg-slate-950/80 backdrop-blur-md shrink-0">
+        <div className="h-16 border-b border-slate-800 flex items-center justify-between px-4 lg:px-6 bg-slate-950 backdrop-blur-none shrink-0">
           <div className="flex items-center gap-3 overflow-hidden">
             <button onClick={() => setIsLeftSidebarOpen(true)} className="lg:hidden p-1.5 -ml-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg">
               <Menu className="w-5 h-5" />
@@ -315,6 +315,55 @@ const Dashboard = () => {
               >
                 {LANGUAGES.map(lang => <option key={lang.code} value={lang.code} className="bg-slate-900">{lang.name}</option>)}
               </select>
+            </div>
+
+            {/* Notifications Toggle */}
+            <div className="relative">
+              <button 
+                onClick={() => setShowNotificationDropdown(!showNotificationDropdown)}
+                className={`relative p-1.5 md:p-2 rounded-lg transition-colors border ${showNotificationDropdown ? 'bg-teal-500/10 border-teal-500/20 text-teal-400' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
+                title="Notifications"
+              >
+                <Bell className="w-4 h-4 md:w-5 md:h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification Dropdown */}
+              {showNotificationDropdown && (
+                <div className="absolute right-0 mt-2 w-72 md:w-80 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl z-50 overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-950/50">
+                    <span className="font-semibold text-slate-200 text-sm">Notifications</span>
+                    {notifications.length > 0 && (
+                      <button onClick={clearAllNotifications} className="text-xs text-teal-400 hover:text-teal-300">Clear All</button>
+                    )}
+                  </div>
+                  <div className="max-h-64 overflow-y-auto scrollbar-thin">
+                    {notifications.length === 0 ? (
+                      <div className="p-4 text-center text-sm text-slate-500">No notifications</div>
+                    ) : (
+                      notifications.map(notif => (
+                        <div 
+                          key={notif._id} 
+                          onClick={() => { if(!notif.read) markAsRead(notif._id); }}
+                          className={`p-3 border-b border-slate-800/50 hover:bg-slate-800/50 cursor-pointer transition-colors ${!notif.read ? 'bg-slate-800/30' : ''}`}
+                        >
+                          <div className="flex justify-between items-start mb-1">
+                            <span className="text-sm text-slate-200">{notif.message}</span>
+                            {!notif.read && <span className="w-2 h-2 rounded-full bg-teal-500 mt-1 shrink-0"></span>}
+                          </div>
+                          <span className="text-[10px] text-slate-500">
+                            {new Date(notif.createdAt).toLocaleString()}
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Right Sidebar Toggle (Room Info) */}
@@ -351,7 +400,7 @@ const Dashboard = () => {
                   
                   <div className={`px-4 py-2.5 rounded-2xl text-[14px] leading-relaxed transition-all relative group-hover:shadow-md ${
                     isSelf 
-                      ? 'bg-gradient-to-br from-teal-500 to-emerald-600 shadow-md shadow-teal-500/20 text-white rounded-tr-sm' 
+                      ? 'bg-gradient-to-br from-blue-600 to-indigo-600 shadow-md shadow-blue-500/20 text-white rounded-tr-sm' 
                       : 'bg-slate-800 border border-slate-700/50 text-slate-200 rounded-tl-sm'
                   }`}>
                     <p className="whitespace-pre-wrap font-medium">

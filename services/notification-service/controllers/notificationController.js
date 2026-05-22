@@ -52,3 +52,24 @@ exports.markAsRead = async (req, res) => {
     res.status(500).json({ message: 'Server Error updating notification' });
   }
 };
+
+// @desc    Delete all user notifications
+// @route   DELETE /api/notifications/all/:userId
+// @access  Private
+exports.deleteAllNotifications = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const authUserId = req.user.id;
+
+    if (authUserId !== userId && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Forbidden: Cannot delete other users\' notifications' });
+    }
+
+    await Notification.deleteMany({ userId });
+
+    res.json({ message: 'All notifications deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting notifications:', error);
+    res.status(500).json({ message: 'Server Error deleting notifications' });
+  }
+};
