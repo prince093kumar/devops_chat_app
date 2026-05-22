@@ -8,7 +8,7 @@ pipeline {
     environment {
         REGISTRY = "ghcr.io"
         REGISTRY_CREDENTIALS_ID = "ghcr-credentials"
-        COMPOSE_PROJECT_NAME = "microservices_chat"
+        COMPOSE_PROJECT_NAME = "chat_app"
     }
     
     stages {
