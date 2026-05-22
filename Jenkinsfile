@@ -23,7 +23,7 @@ pipeline {
             steps {
                 echo 'Spinning up test suite inside temporary container...'
                 // Disable MSYS path conversion on Windows to prevent docker path mangling
-                sh 'MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd)":/app -w /app/services/auth-service node:18-alpine sh -c "npm ci && npm test"'
+                sh 'MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd)":/app -w /app/services/auth-service node:18 sh -c "npm ci && npm test"'
             }
         }
         
