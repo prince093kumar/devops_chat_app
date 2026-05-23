@@ -1,4 +1,4 @@
-name: 🚀 Microservices Chat App CI/CD Pipeline
+name:  Microservices Chat App CI/CD Pipeline
 
 on:
   push:
@@ -13,13 +13,13 @@ env:
 jobs:
   # Job 1: Install & Run Backend / Frontend Tests
   test:
-    name: 🧪 Run Tests and Linting
+    name:  Run Tests and Linting
     runs-on: ubuntu-latest
     steps:
-      - name: ⬇️ Checkout Repository
+      - name:  Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 🟢 Setup Node.js
+      - name:  Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
